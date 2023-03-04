@@ -43,10 +43,10 @@ fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
 # output it the screen as table
 streamlit.dataframe(fruityvice_normalized)
 
-# Let's Query Our Trial Account Metadata
+# Let's Query Some Data
 my_cnx = sf.connect(**streamlit.secrets["snowflake"])
 my_cur = my_cnx.cursor()
-my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
+my_cur.execute("select * from pc_rivery_db.public.fruit_load_list")
 my_data_row = my_cur.fetchone()
-streamlit.text("Hello from Snowflake:")
+streamlit.text("The fruit load list contains:")
 streamlit.text(my_data_row)
