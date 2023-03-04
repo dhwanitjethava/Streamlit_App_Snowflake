@@ -1,6 +1,7 @@
 # Required libraries
 import streamlit
 import pandas as pd
+import snowflake.connector as sf
 
 # Streamlit functions for displaying
 streamlit.title("My Mom's New Healthy Dinner")
