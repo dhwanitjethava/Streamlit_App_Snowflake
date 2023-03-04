@@ -1,7 +1,9 @@
 # Required libraries
 import streamlit
+import requests
 import pandas as pd
 import snowflake.connector as sf
+from urllib.error import URLError 
 
 # Streamlit functions for displaying
 streamlit.title("My Mom's New Healthy Dinner")
@@ -28,20 +30,20 @@ fruits_to_show = my_fruit_list.loc[fruits_selected]
 # Display the table on the app page
 streamlit.dataframe(fruits_to_show)
 
+# take the JSON version of the response and normalize it, output it the screen as table
+def get_fruityvice_data(this_fruit_choice):
+  fruityvice_response = requests.get("https://fruityvice.com/api/fruit/"+this_fruit_choice)
+  fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+  return fruityvice_normalized
+
 # New section to display fruityvice API response
 streamlit.header("Fruityvice Fruit Advice!")
 fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
 streamlit.write('The user entered ', fruit_choice)
 
-import requests
 fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
 # just writes the data to the screen
 #streamlit.text(fruityvice_response.json())
-
-# take the JSON version of the response and normalize it
-fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
-# output it the screen as table
-streamlit.dataframe(fruityvice_normalized)
 
 # Let's Query Some Data
 my_cnx = sf.connect(**streamlit.secrets["snowflake"])
